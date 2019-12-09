@@ -1,0 +1,354 @@
+.body { background-color: #fff; }
+
+.maddashTitle {
+	background-color: #0b9c28;
+	padding: 20px 20px 20px 5px;
+	font-size: 24px;
+	color: #FFFFFF;
+	font-weight: bolder;
+}
+
+a.maddashTitleLink:link {
+	color: #FFFFFF;
+	font-weight: bolder;
+	text-decoration:none;
+}
+
+a.maddashTitleLink:visited {
+	color: #FFFFFF;
+	font-weight: bolder;
+	text-decoration:none;
+}
+
+a.maddashTitleLink:hover {
+	color: #FFFFFF;
+	font-weight: bolder;
+	text-decoration:none;
+}
+
+a.maddashTitleLink:active {
+	color: #FFFFFF;
+	font-weight: bolder;
+	text-decoration:none;
+}
+
+.maddashCheckNav {
+	background-color: #FFFFFF;
+	padding: 5px 5px 5px 5px;
+	font-size:13px;
+	color:#000000;
+}
+
+.maddashCheckTitle {
+	font-size: 24px;
+	font-weight: bold;
+	color:#000000;
+}
+
+.maddashCheckSubtitle {
+	font-size: 14px;
+	font-style: italic;
+	color: #999999;
+	padding: 5px 5px 5px 5px;
+}
+
+.maddashCheckTitleDiv {
+	margin: 10px 10px 10px 5px;
+}
+
+.maddashQuickStatus{
+	background-color: #FFFFFF;
+	font-size:14px;
+	margin:10px 0px 10px 5px;
+}
+
+.maddashFieldLabel{
+	font-weight:bold;
+	margin: 0px 0px 0px 0px;
+}
+
+td.maddashFieldLabel {
+	text-align: left;
+	vertical-align: top;
+	padding: 5px 5px 5px 5px;
+	
+	
+}
+
+.maddashFieldValue {
+	
+}
+.maddashQuickStatusCol{
+	font-weight:bold;
+	margin: 0px 0px 0px 10px;
+}
+
+.maddashStatusSummary {
+	font-weight:bolder;
+}
+
+.maddashStatusOK {
+	color:green;
+	font-weight:bolder;
+}
+
+.maddashStatusCritical {
+	color:red;
+	font-weight:bolder;
+}
+
+.maddashStatusWarning {
+	color:yellow;
+	font-weight:bolder;
+}
+
+.maddashStatusUnknown {
+	color:orange;
+	font-weight:bolder;
+}
+
+.maddashGraphFrame {
+	width:100%; 
+	height:100%;
+	margin: 0px 0px 0px 0px;
+	overflow: hidden;
+	border: none;
+	background:#FFF;
+	border-style:none;
+            	
+}
+
+.maddashgridPane {
+	margin: 5px 5px 5px 5px;
+}
+
+.maddashgridTopContainer {
+	margin: 15px 5px 5px 5px;
+}
+
+.maddashgridTitleDiv {
+	width: 100%;
+	text-align: left;
+}
+
+.maddashgridTitle {
+	width: 100%;
+	font-size: 24px;
+	font-weight: bold;
+	text-align:center;
+	margin-top: 5px;
+	
+}
+
+.maddashCheckSubTitle {
+	font-size: 18px;
+	font-weight: normal;
+	font: italic;
+	color:#000000;
+}
+
+.maddashCheckDetailsTable {
+	
+}
+
+.historyItem {
+	margin: 20px 10px 10px 10px;
+	width: 600px;
+	text-align: left;
+}
+
+.maddashHistSlider {
+	width: 300px;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+#maddashHistory {
+	width: 750px;
+}
+
+.maddashPageNum {
+	width: 300px;
+	text-align:center;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+.maddashDashboardName {
+	font-size: 24px;
+	font-weight: bold;
+	color:#000000;
+	margin: 15px 5px 5px 5px;
+}
+
+.maddashGridName {
+	font-size: 18px;
+	color:#000000;
+	margin: 15px 5px 5px 5px;
+}
+.maddashFooter {
+    background-color: #fff;
+    display: block;
+    clear: both;
+    height: 50px;
+}
+.maddashFooterMoreInfo {
+	background-color: #fff;
+        text-align:center;
+        margin-left:auto;
+        margin-right:auto;
+        width: 100%;
+        font-size: 12px;
+        height: 100px;
+        color:#000000;
+}
+.maddashRefreshLabel{
+    color: #fff;
+    text-align: middle;
+    font-size: 13px;
+    float: middle;
+    margin: 2px 5px 2px 0px;
+    padding-right: 5px;
+    font-style: italic;
+}
+
+.maddashEventListCol {
+    display:inline-block;
+    width: 20%;
+    vertical-align: text-top;
+
+}
+
+.maddashEventListRow {
+    width: 100%;
+    margin: 5px auto 0px auto;
+    border-bottom: 1px solid;
+}
+
+.maddashEventListRowHeading {
+    width: 100%;;
+    margin: 5px auto 0px auto;
+    background: #DDDDDD;
+    background: -moz-linear-gradient(#B1B1B1 0%, #DDDDDD 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #B1B1B1), color-stop(100%, #DDDDDD));
+    background: -webkit-linear-gradient(#B1B1B1 0%, #DDDDDD 100%);
+    padding: 2px 2px 2px 2px;
+    
+}
+
+.maddashReportScopeTitle {
+	font-size: 16px;
+	color:#000000;
+	margin-top: 10px;
+	margin: 10px 5px 5px 0px;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.maddashReportReport {
+    margin: 5px 5px 10px 0px;
+}
+
+.report-container {
+    width: 97%;
+    margin: 10px 10px 20px 10px;
+    border-bottom: 1px solid  #d0d1e6;
+    padding-bottom: 20px
+}
+
+.maddashReportDashboardName {
+	font-size: 24px;
+	font-weight: bold;
+	margin: 15px 5px 5px 5px;
+}
+
+.maddashReportDashboardName a:link{
+    color:#000000;
+    text-decoration: none;
+}
+
+.maddashReportDashboardName a:hover{
+    color:#000000;
+    text-decoration: underline;
+}
+
+.maddashReportDashboardName a:active{
+    color:#000000;
+    text-decoration: none;
+}
+
+.maddashReportDashboardName a:visited{
+    color:#000000;
+    text-decoration: none;
+}
+
+.maddashReportGridName {
+	font-size: 18px;
+	font-weight: bold;
+	color:#000000;
+	margin: 25px 5px 5px 0px;
+}
+
+.maddashReportGridName a:link{
+    color:#000000;
+    text-decoration: underline;
+}
+
+.maddashReportGridName a:hover{
+    color:#999999;
+    text-decoration: underline;
+}
+
+.maddashReportGridName a:active{
+    color:#000000;
+    text-decoration: underline;
+}
+
+.maddashReportGridName a:visited{
+    color:#000000;
+    text-decoration: underline;
+}
+
+.maddashReportRow {
+    margin: 5px 0px 5px 0px;
+}
+
+.maddashReportLabel {
+    font-size: 14px;
+	font-weight: bold;
+	margin-right: 5px;
+}
+.maddashReportProblems {
+    margin-left: 0px;
+}
+
+.maddashReportProblem {
+    border: 1px solid  #d0d1e6;
+    background-color:#fff7fb;
+    margin: 5px 0px 5px 0px;
+    padding: 5px 5px 5px 5px;
+}
+
+.maddashReportStatusRowImg {
+        vertical-align: middle;
+        height: 24px;
+        width: 24px;
+        
+}
+.maddashReportStatusRow {
+    font-size:14px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.maddashReportSolutionsList {
+    margin: 0px 0px 0px 0px;
+    font-size: 14px;
+}
+
+.maddashSummaryReportsDiv {
+    margin: 0px 0px 0px 10px;
+    width: 95%;
+}
+
+

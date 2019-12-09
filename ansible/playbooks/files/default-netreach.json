@@ -1,0 +1,15 @@
+{
+  "default_netreach": {
+    "priority": {
+      "level": 1,
+      "group": "netreach"
+    },
+    "check": {
+      "type": "ps-nagios-netreach"
+    },
+    "visualization": {
+      "type": "blank"
+    },
+    "display-name": "Network Reachability"
+  }
+}

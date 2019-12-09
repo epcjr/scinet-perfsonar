@@ -1,0 +1,87 @@
+#
+# Fixups to MaDDash
+#
+
+- name: perfSONAR MadDash
+  tags: maddash
+  hosts: ps-maddash
+  tasks:
+
+    - name: ps-maddash
+      debug:
+        var: groups['ps-maddash']
+
+    # Graph Scale
+    - name: change maddash throughput graph scale for 10GB networks
+      command: > 
+        psconfig maddash-grid edit --name default_throughput
+        --check-critical-threshold 4 --check-warning-threshold 7
+
+    # Style Sheets
+    - name: Copy MaDDash style sheets
+      copy:
+        src: "{{ item }}"
+        dest: /usr/lib/maddash/maddash-webui/style
+        owner: maddash
+        group: maddash
+        mode: '0444'
+      with_fileglob:
+        - "{{ playbook_dir }}/files/maddash*.css"
+
+    # Netreach additions
+    - name: copy ps-nagios-netreach.json
+      copy:
+        src: "{{ playbook_dir }}/files/ps-nagios-netreach.json"
+        dest: /usr/lib/perfsonar/psconfig/checks/
+        owner: perfsonar
+        group: perfsonar
+        mode: '0644'
+    - name: copy default-netreach.json
+      copy:
+        src: "{{ playbook_dir }}/files/default-netreach.json"
+        dest: /tmp
+        owner: perfsonar
+        group: perfsonar
+        mode: '0644'
+    - name: copy install-default-netreach.sh
+      copy:
+        src: "{{ playbook_dir }}/files/install-default-netreach.sh"
+        dest: /tmp
+        owner: perfsonar
+        group: perfsonar
+        mode: '0755'
+    - name: run install-default-netreach.sh
+      command: /tmp/install-default-netreach.sh /tmp/default-netreach.json
+
+    # Add missing "blank" viz template
+    # TODO: This should be fixed by SC20.
+    - name: Install blank vizualization template
+      copy:
+        src: "{{ playbook_dir }}/files/blank.json"
+        dest: /usr/lib/perfsonar/psconfig/visualization
+        owner: perfsonar
+        group: perfsonar
+        mode: '0444'
+
+    # Make sure HTTPD is enabled
+    # TODO: This should be fixed by SC20.
+    - name: Enable HTTPD
+      service:
+        name: httpd
+        enabled: yes
+        state: started
+
+    # Disable SELinux
+    - name: Disable SELinux
+      selinux:
+        state: disabled
+    # TODO: REMOVE THIS
+    #- name: Reboot after changing SELinux state
+    #  reboot:
+
+    # Enable HTTPS port
+    - name: Enable HTTPS on firewall
+      firewalld:
+        service: https
+        permanent: yes
+        state: enabled

@@ -1,0 +1,28 @@
+# Fix a bug in the Esmond archiver
+
+# TODO: This should come out for SC20 since perfSONAR will have
+# released the patched version by then.
+
+- name: perfSONAR Esmond Archiver Patch
+  tags: pscheduler
+  hosts:
+    - ps-testpoints
+    - ps-toolkits
+
+  tasks:
+
+    - name: Install patch
+      yum:
+        name: patch
+        state: present
+
+    - name: Apply the Esmond archiver patch
+      patch:
+        src: "{{ playbook_dir }}/files/esmond-archiver-test-type.patch"
+        basedir: /usr/libexec/pscheduler/classes/archiver
+        strip: 2
+
+    - name: Restart the archiver
+      systemd:
+        state: restarted
+        name: pscheduler-archiver

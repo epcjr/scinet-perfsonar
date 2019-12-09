@@ -1,0 +1,48 @@
+#!/bin/sh -e
+#
+# Build up an ansible account
+#
+# Usage: build-ansible-account [ FILE ... ]
+#
+# Where the specified files contain SSH public keys to be added to the
+# Ansible account's authorized SSH keys.
+#
+
+
+if [ $(id -u) -ne 0 ]
+then
+    echo "This program must be run as root." 1>&2
+    exit 1
+fi
+
+
+ANSIBLE_USER=ansible
+
+# Make the account
+
+id ansible > /dev/null 2>&1  \
+    && userdel --remove "${ANSIBLE_USER}"
+useradd -c "Ansible" "${ANSIBLE_USER}"
+ANSIBLE_HOME=~ansible
+
+
+# Give it full sudo
+
+echo "ansible ALL= (ALL) NOPASSWD:ALL" > "/etc/sudoers.d/${ANSIBLE_USER}"
+chmod 440 "/etc/sudoers.d/${ANSIBLE_USER}"
+
+
+# Set up for SSH from the controller
+
+SSHDIR="${ANSIBLE_HOME}/.ssh"
+
+rm -rf "${SSHDIR}"
+mkdir -p "${SSHDIR}"
+cat "$@" > "${SSHDIR}/authorized_keys"
+
+
+# Batten down the SSH directory's hatches.
+
+chown -R "${ANSIBLE_USER}.${ANSIBLE_USER}" "${SSHDIR}"
+chmod 700 "${SSHDIR}"
+find "${SSHDIR}" -type f | xargs -r chmod 400

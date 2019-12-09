@@ -1,0 +1,121 @@
+{
+    "type": "ps-nagios-netreach",
+    "name": "Network Reachability",
+    "description": "Queries an esmond MA for network reachability tests and alarms on up/down reported by test by default",
+    "requires": {
+        "test-type": ["netreach"],
+        "archive-type": ["esmond"]
+    },
+    "archive-accessor": {
+        "script": [ ".url" ]
+    },
+    "status-labels": {
+        "ok":"Host(s) are reachable",
+        "warning": "Only gateway is reachable",
+        "critical": "Nothing is reachable",
+        "notrun": "Check has not run yet",
+        "unknown": "Unable to find test data"
+    },
+    "defaults": {
+        "check-interval": "PT5M",
+        "warning-threshold": "0.9",
+        "critical-threshold": "0.1",
+        "retry-attempts": 1,
+        "retry-interval": "PT8M",
+        "report-yaml-file": "",
+        "timeout": "PT60S",
+        "params": {
+            "time-range": "1200",
+            "tool": "",
+            "function": "",
+            "jq": "(.\\\"network-up\\\"|tostring|sub(\\\"true\\\";\\\"1.0\\\")|sub(\\\"false\\\";\\\"0\\\")|tonumber)+(.\\\"gateway-up\\\"|tostring|sub(\\\"true\\\";\\\"0.5\\\")|sub(\\\"false\\\";\\\"0\\\")|tonumber)",
+            "use-host": "",
+            "units": "",
+            "scale": "",
+            "label-ok-symbol": "Up",
+            "label-warning-symbol": "Gateway Only",
+            "label-critical-symbol": "Down"
+        }
+    },
+    "vars": {
+        "host": { 
+            "script": [
+                ".test.spec.host"
+            ]
+        },
+        "network": { 
+            "script": [
+                ".test.spec.network"
+            ]
+        }
+    },
+    "command": "/usr/lib64/nagios/plugins/check_esmond",
+    "command-opts": {
+        "--url": {
+            "required": true,
+            "condition": "{% ma_url_forward %}",
+            "arg": "{% ma_url_forward %}"
+        },
+        "--event-type": {
+            "condition": "1",
+            "arg": "pscheduler-raw"
+        },
+        "--metadata-params__type": {
+            "condition": "1",
+            "arg": "pscheduler-test-type netreach"
+        },
+        "--measurement-agent": {
+            "condition": "{% row %}",
+            "arg": "{% row %}"
+        },
+
+        "--metadata-params__host": {
+            "condition": "{% check.params.use-host %}",
+            "arg": "pscheduler-dns-host {% check.vars.host %}"
+        },
+        "--metadata-params__network": {
+            "condition": "{% check.vars.network %}",
+            "arg": "pscheduler-netreach-network {% check.vars.network %}"
+        },
+
+        "--function": {
+            "condition": "{% check.params.function %}",
+            "arg": "{% check.params.function %}"
+        },
+        "--jq": {
+            "condition": "{% check.params.jq %}",
+            "arg": "{% check.params.jq %}"
+        },
+        "--time-range": {
+            "required": true,
+            "condition": "{% check.params.time-range %}",
+            "arg": "{% check.params.time-range %}"
+        },
+        "--warning": {
+            "required": true,
+            "condition": "{% check.warning %}",
+            "arg": "{% check.warning %}:"
+        },
+        "--critical": {
+            "required": true,
+            "condition": "{% check.critical %}",
+            "arg": "{% check.critical %}:"
+        },
+        "--tool-name": {
+            "condition": "{% check.params.tool %}",
+            "arg": "{% check.params.tool %}"
+        },
+        "--timeout": {
+            "condition": "{% check.timeout.seconds %}",
+            "arg": "{% check.timeout.seconds %}"
+        },
+        "--units": {
+            "condition": "{% check.params.units %}",
+            "arg": "{% check.params.units %}"
+        },
+        "--scale": {
+            "condition": "{% check.params.scale %}",
+            "arg": "{% check.params.scale %}"
+        }        
+    }
+}

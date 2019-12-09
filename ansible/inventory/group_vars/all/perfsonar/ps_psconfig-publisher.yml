@@ -26,12 +26,10 @@
 # remote_configure_archives: default to False.  Set to True if you want the
 #   remote_agents to send results to archivers defined in the json mesh file.
 #
-# perfsonar_psconfig_publish_meshes:
-#   - mesh: filename
-#     remote_url: url
-#     remote_dir: /tmp
-#     remote_agents: "{{ groups['ps-maddash'] }}
-#       + {{ groups['ps-toolkits'] }}
-#       + {{ groups['ps-testpoints'] }}"
-#     remote_configure_archives: True
-perfsonar_psconfig_publish_meshes: []
+perfsonar_psconfig_publish_meshes:
+  - mesh: mesh.json
+    remote_dir: /tmp
+    remote_agents: "{{ groups['ps-maddash'] }}
+      + {{ groups['ps-toolkits'] }}
+      + {{ groups['ps-testpoints'] }}"
+    remote_configure_archives: True

@@ -1,0 +1,29 @@
+#
+# Fixups to Publisher
+#
+
+- name: perfSONAR Publisher
+  tags: publisher
+  hosts: ps-psconfig-publishers
+  tasks:
+
+    # TODO: This isn't taking.
+    - name: Enable httpd
+      systemd:
+        state: started
+        enabled: yes
+        name: httpd
+        daemon_reload: yes
+
+    - name: Enable firewalld
+      systemd:
+        state: started
+        enabled: yes
+        name: firewalld
+        daemon_reload: yes
+
+    - name: Enable HTTPS on firewall
+      firewalld:
+        service: https
+        permanent: yes
+        state: enabled

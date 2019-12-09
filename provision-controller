@@ -1,0 +1,140 @@
+#!/bin/sh -e
+#
+# Provision the SCinet perfSONAR Ansible controller
+#
+
+if [ $(id -u) -ne 0 ]
+then
+    echo "This program must be run as root." 1>&2
+    exit 1
+fi
+
+WHOAMI=$(basename "$0")
+WHEREAMI=$(dirname "$0")
+
+
+#
+# Ansible Account
+#
+
+# This will have been built manually or by Vagrant
+
+ANSIBLE_USER=ansible
+ANSIBLE_HOME=~ansible
+
+
+#
+# EPEL, which has newer versions of a few things we use.
+#
+
+# TODO: Can probably just install "epel-relase"
+
+# Determine the RHEL version without depending on lsb_release.
+REDHAT_RELEASE_MAJOR=$(sed -e 's/^.* \([0-9.]\+\) .*$/\1/' /etc/redhat-release | awk -F. '{ print $1 }')
+
+EPEL_OP=$(rpm -q --quiet epel-release && echo update || echo install)
+yum -y "${EPEL_OP}" "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${REDHAT_RELEASE_MAJOR}.noarch.rpm"
+
+
+#
+# Configure SSH
+#
+
+SSHDIR="${ANSIBLE_HOME}/.ssh"
+
+# Our own keys
+cp -f ${WHEREAMI}/ssh/id_* "${SSHDIR}"
+
+# Keys of friendly users
+cp -f ${WHEREAMI}/ssh/authorized_keys "${SSHDIR}/authorized_keys"
+
+# Install the SSH config
+cp -f ${WHEREAMI}/ssh/config "${SSHDIR}/config"
+
+# Batten down the SSH directory's hatches.
+chown -R "${ANSIBLE_USER}.${ANSIBLE_USER}" "${SSHDIR}"
+chmod 700 "${SSHDIR}"
+find "${SSHDIR}" -type f | xargs -r chmod 400
+
+#
+# Install Ansible and provision everything
+#
+
+yum -y install ansible git
+
+#
+# Install the perfSONAR playbook
+#
+
+PLAYBOOK=ansible-playbook-perfsonar
+rm -rf ${PLAYBOOK}
+git clone "https://github.com/perfsonar/${PLAYBOOK}.git"
+PLAYBOOK=$(cd "${PLAYBOOK}" && pwd)
+( cd "${PLAYBOOK}" \
+    && ansible-galaxy install -r requirements.yml --ignore-errors )
+
+
+#
+# Install the inventory
+#
+
+INVENTORY=$(cd "./ansible/inventory" && pwd)
+
+#
+# Build and install the mesh configuration
+#
+
+#yum -y install jq
+#make -C mesh clean
+#make -C mesh
+#cp mesh/scinet-mesh.json ${PLAYBOOK}/files/mesh.json
+
+#
+# Give Ansible a full set of everything
+#
+
+ANSIBLE_PLAYBOOK="${ANSIBLE_HOME}/${WHOAMI}-playbook"
+ANSIBLE_INVENTORY="${ANSIBLE_HOME}/${WHOAMI}-inventory"
+ANSIBLE_ANSIBLE="${ANSIBLE_HOME}/${WHOAMI}-ansible"
+ 
+rm -rf "${ANSIBLE_PLAYBOOK}" "${ANSIBLE_INVENTORY}" "${ANSIBLE_ANSIBLE}"
+cp -r "${PLAYBOOK}" "${ANSIBLE_PLAYBOOK}"
+cp -r "${INVENTORY}" "${ANSIBLE_INVENTORY}"
+cp -r "${WHEREAMI}/ansible" "${ANSIBLE_ANSIBLE}"
+
+chown -R "${ANSIBLE_USER}.${ANSIBLE_USER}" \
+    "${ANSIBLE_PLAYBOOK}" "${ANSIBLE_INVENTORY}" "${ANSIBLE_ANSIBLE}"
+
+
+#
+# Do the deed
+#
+
+sudo -u "${ANSIBLE_USER}" ansible -i "${ANSIBLE_INVENTORY}/" "$@" all -m ping
+
+#exit 0
+
+do_ansible()
+{
+    sudo -u "${ANSIBLE_USER}" ansible-playbook -i "${ANSIBLE_INVENTORY}/" "$@"
+} 
+ 
+
+# Main build
+do_ansible "${ANSIBLE_PLAYBOOK}/perfsonar.yml" \
+    | tee "${HOME}/ansible.out"
+
+# publisher tweaks
+#do_ansible "${ANSIBLE_ANSIBLE}/playbooks/publisher-fixups.yml" \
+#    | tee "${HOME}/ansible-publisher.out"
+
+# MaDDash tweaks
+#do_ansible "${ANSIBLE_ANSIBLE}/playbooks/maddash-fixups.yml" \
+#    | tee "${HOME}/ansible-maddash.out"
+
+# Patch to Esmond archiver
+#
+# TODO: This should come out for SC20 since perfSONAR will have
+# released the patched version by then.
+#do_ansible "${ANSIBLE_ANSIBLE}/playbooks/esmond-archiver-fix.yml" \
+#    | tee "${HOME}/ansible-esmond.out"
